@@ -1,30 +1,32 @@
 import { ReadingsModel } from "../models/readingsModel.js";
 
-export const ReadingsController = {
-  async list(req, res) {
-    try {
-      const data = await ReadingsModel.list();
-      res.json(data);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  },
+// GET /api/readings
+export async function getReadings(req, res) {
+  try {
+    const data = await ReadingsModel.list();
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
 
-  async latest(req, res) {
-    try {
-      const data = await ReadingsModel.latest();
-      res.json(data);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  },
+// GET /api/readings/latest
+export async function latestReading(req, res) {
+  try {
+    const data = await ReadingsModel.latest();
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
 
-  async create(req, res) {
-    try {
-      const created = await ReadingsModel.create(req.body);
-      res.status(201).json(created);
-    } catch (error) {
-      res.status(400).json({ error: error.message });
-    }
-  },
-};
+// POST /api/readings
+export async function createReading(req, res) {
+  try {
+    const payload = req.body;
+    const created = await ReadingsModel.create(payload);
+    res.json(created);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}

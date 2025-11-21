@@ -1,19 +1,29 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+
+// ROUTES
+import authRoutes from "./auth/authRoutes.js";
 import readingsRoutes from "./routes/readingsRoutes.js";
 import thresholdsRoutes from "./routes/thresholdsRoutes.js";
 
+// Load .env
 dotenv.config();
 
 const app = express();
+
+// Middlewares
 app.use(cors());
 app.use(express.json());
 
+// Register routes
+app.use("/api/auth", authRoutes);
 app.use("/api/readings", readingsRoutes);
 app.use("/api/thresholds", thresholdsRoutes);
 
+// Start server
 const port = process.env.PORT || 5000;
-app.listen(port, '0.0.0.0', () => {
-  console.log(`Backend server running on port ${port}`);
+
+app.listen(port, "0.0.0.0", () => {
+  console.log(`🚀 Backend running on port ${port}`);
 });

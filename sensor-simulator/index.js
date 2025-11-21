@@ -1,9 +1,10 @@
 import mqtt from "mqtt";
 
 const BROKER_URL = "mqtt://broker.hivemq.com:1883";
-const TOPIC = "ppb/kel31/iot/temperature";
+const TOPIC = "ppb/kel16/iot/temperature";
 const BACKEND_BASE_URL = "http://localhost:5000";
 const PUBLISH_INTERVAL_MS = 5000;
+const API_KEY = "your_api_key_here"; // Ganti dengan API key dari backend
 
 const clientId = `simulator-${Math.random().toString(16).slice(2)}`;
 const client = mqtt.connect(BROKER_URL, {
@@ -26,7 +27,12 @@ client.on("error", (error) => {
 
 async function fetchLatestThreshold() {
   try {
-    const response = await fetch(`${BACKEND_BASE_URL}/api/thresholds/latest`);
+    const response = await fetch(`${BACKEND_BASE_URL}/api/thresholds/latest`, {
+      headers: {
+        "Authorization": `Bearer ${API_KEY}`,
+        "Content-Type": "application/json"
+      }
+    });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const data = await response.json();
     return data?.value ?? null;
@@ -59,7 +65,10 @@ async function publishLoop() {
       try {
         const response = await fetch(`${BACKEND_BASE_URL}/api/readings`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { 
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${API_KEY}`
+          },
           body: JSON.stringify({ temperature, threshold_value: latestThreshold }),
         });
 

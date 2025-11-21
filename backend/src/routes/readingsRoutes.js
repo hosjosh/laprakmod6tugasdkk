@@ -1,10 +1,10 @@
 import express from "express";
-import { ReadingsController } from "../controllers/readingsController.js";
+import { getReadings, createReading, latestReading } from "../controllers/readingsController.js";
 
 const router = express.Router();
 
-router.get("/", ReadingsController.list);
-router.post("/", ReadingsController.create);
-router.get("/latest", ReadingsController.latest);
+router.get("/", getReadings);
+router.get("/latest", latestReading);
+router.post("/", createReading);
 
 export default router;

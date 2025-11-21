@@ -1,30 +1,28 @@
 import { ThresholdsModel } from "../models/thresholdsModel.js";
 
-export const ThresholdsController = {
-  async list(req, res) {
-    try {
-      const data = await ThresholdsModel.list();
-      res.json(data);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  },
+export async function getThresholds(req, res) {
+  try {
+    const data = await ThresholdsModel.list();
+    return res.json(data);
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+}
 
-  async latest(req, res) {
-    try {
-      const data = await ThresholdsModel.latest();
-      res.json(data);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  },
+export async function latestThreshold(req, res) {
+  try {
+    const data = await ThresholdsModel.latest();
+    return res.json(data ?? null);
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+}
 
-  async create(req, res) {
-    try {
-      const created = await ThresholdsModel.create(req.body);
-      res.status(201).json(created);
-    } catch (error) {
-      res.status(400).json({ error: error.message });
-    }
-  },
-};
+export async function createThreshold(req, res) {
+  try {
+    const created = await ThresholdsModel.create(req.body);
+    return res.json(created);
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
+}

@@ -2,6 +2,9 @@ import { supabase } from "../config/supabaseClient.js";
 
 const TABLE = "threshold_settings";
 
+/**
+ * Mengubah value dari string → number
+ */
 function normalize(row) {
   if (!row) return row;
   return {
@@ -11,6 +14,9 @@ function normalize(row) {
 }
 
 export const ThresholdsModel = {
+  /**
+   * Ambil list semua threshold (max 100)
+   */
   async list() {
     const { data, error } = await supabase
       .from(TABLE)
@@ -22,6 +28,9 @@ export const ThresholdsModel = {
     return data.map(normalize);
   },
 
+  /**
+   * Ambil threshold terbaru
+   */
   async latest() {
     const { data, error } = await supabase
       .from(TABLE)
@@ -34,6 +43,9 @@ export const ThresholdsModel = {
     return normalize(data);
   },
 
+  /**
+   * Buat threshold baru
+   */
   async create(payload) {
     const { value, note } = payload;
 
@@ -43,7 +55,7 @@ export const ThresholdsModel = {
 
     const row = {
       value,
-      note: note?.slice(0, 180) ?? null,
+      note: note?.slice(0, 180) ?? null, // batasi note agar tidak terlalu panjang
     };
 
     const { data, error } = await supabase

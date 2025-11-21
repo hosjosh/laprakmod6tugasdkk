@@ -2,6 +2,7 @@ import { supabase } from "../config/supabaseClient.js";
 
 const TABLE = "sensor_readings";
 
+// Normalisasi data (supaya temperature & threshold_value menjadi number)
 function normalize(row) {
   if (!row) return row;
   return {
@@ -13,6 +14,7 @@ function normalize(row) {
 }
 
 export const ReadingsModel = {
+  // Mendapatkan history readings (max 100 data)
   async list() {
     const { data, error } = await supabase
       .from(TABLE)
@@ -24,6 +26,7 @@ export const ReadingsModel = {
     return data.map(normalize);
   },
 
+  // Mendapatkan data terbaru
   async latest() {
     const { data, error } = await supabase
       .from(TABLE)
@@ -36,6 +39,7 @@ export const ReadingsModel = {
     return normalize(data);
   },
 
+  // Membuat reading baru
   async create(payload) {
     const { temperature, threshold_value } = payload;
 
